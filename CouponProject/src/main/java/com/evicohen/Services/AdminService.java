@@ -32,7 +32,7 @@ public class AdminService {
 //	private HttpServletRequest request;
 //	@Context
 //	private HttpServletResponse response;
-
+//
 //	private AdminFacade getFacade() {
 //
 //		AdminFacade admin = null;
@@ -46,7 +46,7 @@ public class AdminService {
 
 		AdminFacade admin = null;
 		admin = (AdminFacade) CouponSystem.getCouponSystem().login("admin", "1234", clientType.Admin);
-		
+		System.out.println(admin);
 		return admin;
 
 	}
@@ -56,13 +56,9 @@ public class AdminService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getAllCompnies () throws Exception {
 		
-		System.out.println("test2");
-		
 		AdminFacade admin = getFacade();
-		Collection<Company> companies = admin.getAllCompanies(); 
-		
-		return new Gson().toJson(companies); 
-		
+		Collection<Company> companies = admin.getAllCompanies(); 		
+		return new Gson().toJson(companies); 	
 		
 	}
 

@@ -38,7 +38,8 @@
 					$("#custTbl").append(
 						"<tr>"
 						+ "<td>" + item.id + "</td>"
-						+ "<td>" + item.custName + "</td>"
+						+ "<td>" + item.CustomerName + "</td>"
+						+ "<td>" + item.password + "</td>"
 						+ "<td> <button class='button' onClick='removeCustomer(" + item.id + ")'> Delete </button> </td>" +
 						+ "</tr>")
 				})
@@ -96,13 +97,14 @@
 					<tr>
 						<th>ID</th>
 						<th>Customer Name</th>
+						<th>Password </th>
 						<th>Remove Customer</th>
 					</tr>
 				</table>
 
 				<br>
 				<h3> Add a new customer</h3>
-				<form id="addCustomerFrm" action="http://localhost:8080/com.johnbryce/rest/admin/createCustomer">
+				<form id="addCustomerFrm" action="http://localhost:8080/CouponProject/rest/admin/createCustomer">
 					Customer name: <input type="text" name="name"><br> Customer pass: <input type="text" name="pass"> <br>
 					<input type="submit" value="Add customer">
 				</form>

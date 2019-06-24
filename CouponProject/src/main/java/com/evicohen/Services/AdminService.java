@@ -21,6 +21,7 @@ import com.evicohen.Exceptions.CreateException;
 import com.evicohen.Exceptions.DBException;
 import com.evicohen.Facade.AdminFacade;
 import com.evicohen.JavaBeans.Company;
+import com.evicohen.JavaBeans.Customer;
 import com.evicohen.Main.CouponSystem;
 import com.evicohen.Main.CouponSystem.clientType;
 import com.google.gson.Gson;
@@ -29,9 +30,6 @@ import com.google.gson.Gson;
 @Path("admin")
 public class AdminService {
 
-	public AdminService() {
-		System.out.println("Im here 1");
-	}
 
 //	@Context
 //	private HttpServletRequest request;
@@ -62,8 +60,15 @@ public class AdminService {
 	public String getAllCompnies () throws Exception {
 		
 		AdminFacade admin = getFacade();
-		Collection<Company> companies = admin.getAllCompanies(); 		
-		return new Gson().toJson(companies); 	
+		try {
+			Collection<Company> companies = admin.getAllCompanies(); 		
+			return new Gson().toJson(companies); 	
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return null;
+	
 		
 	}
 	
@@ -120,14 +125,13 @@ public class AdminService {
 	public String createComapny(@QueryParam("name") String compName, @QueryParam("pass") String password,
 			@QueryParam("email") String email) throws Exception {
 
-		String failMassage = "FAILED TO REMOVE A COMPANY: there is no such id! " + compName
-				+ " - please enter another company id";
+	
 		AdminFacade admin = getFacade();
 		Company company = new Company(1111, compName, password, email);
 
 		try {
 
-			if (admin.createCompany(company) == true) {
+			if (admin.createCompany(company)) {
 
 				return "SUCCEED TO ADD A NEW COMPANY: name = " + compName + ", id = " + company.getId();
 
@@ -138,14 +142,14 @@ public class AdminService {
 			e.printStackTrace();
 		}
 
-		return failMassage;
+		return "FAILED TO CREATE A COMPANY:  " + compName;
 	}
 	
 	@DELETE
 	@Path("removeCompany/{compId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String removeCompany(@PathParam("compId")long id) throws Exception { 
-		System.out.println("Im here Remove Company");
+
 		AdminFacade admin = getFacade(); 
 		Company company = admin.getCompany(id);
 		System.out.println(id);
@@ -201,7 +205,128 @@ public class AdminService {
 		
 	}
 	
+	@Path("createCustomer")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String createCustomer(@QueryParam("name") String custName, @QueryParam("pass") String password) throws Exception {
+		
+		AdminFacade admin = getFacade(); 
+		Customer customer = new Customer(1111, custName, password); 
+		try {
+			
+			if (admin.createCustomer(customer)) {
+				
+				return "SUCCEED TO ADD A NEW CUSTMER: name = " + custName ;	
+			}		
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 
+		
+		return "FAILED TO CREATE A CUSTOMER: " + custName;
+		
 	
+	}
 
+	@DELETE
+	@Path("removeCustomer/{custName}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String removeCustomer(@PathParam("custName")String custName) throws Exception { 
+
+		AdminFacade admin = getFacade(); 
+		Customer customer = admin.getCustomer(custName); 
+		
+		try {
+			
+            if (customer != null ) { 
+            	admin.removeCustomer(customer); 
+            	return "SUCCEED TO REMOVE A CUSTOMER: name = " + custName ;	
+            }
+			return "FAILED TO REMOVE A CUSTOMER:  please try again " ;  
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return "FAILD TO REMOVE A CUSTOMER, THE  CUSTOMER :" +  custName + "no such a customer "  ; 
+				
+	} 
+	
+	@POST 
+	@Path ("updateCustomer") 
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	
+	public String updateCustomer ( String jsonCustString) throws Exception  {
+		
+		AdminFacade admin = getFacade() ; 
+		Gson gson = new Gson(); 
+		
+		Customer custFromJson = gson.fromJson(jsonCustString, Customer.class); 
+		Customer customer = admin.getCustomer(custFromJson.getCustomerName());
+		try {
+			
+			if ( customer != null ) { 
+				admin.updateCustomer(customer,custFromJson.getPassword()); 	
+				
+				return "SUCCEED TO UPDATE A CUSTOMER + " +  customer.getCustomerName() +  "  : Password = " + custFromJson.getPassword() ; 
+			}
+					
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		return "FAILED TO UPDATE A CUSTOMER:" + customer.getCustomerName() ; 
+		
+		
+		
+	}
+	
+	@GET 
+	@Path ("getCustomer/{custName}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getCustomer (@PathParam("custName") String custName) throws Exception { 
+		
+		AdminFacade admin = getFacade() ; 
+		
+		try { 
+			
+			Customer customer = admin.getCustomer(custName);
+			if ( customer != null) { 
+				return new Gson().toJson(customer); 
+			}
+			
+			
+		}catch ( Exception e ) { 
+			
+		}
+		
+		return null ; 
+		
+	}
+
+	@Path("getAllCustomers")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getAllCustomers() throws Exception {
+		
+		AdminFacade admin = getFacade();
+		try {
+			Collection<Customer> customers = admin.getAllCustomers(); 		
+			return new Gson().toJson(customers); 	
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return null;
+	
+		
+	}
 }
+
+
+
+

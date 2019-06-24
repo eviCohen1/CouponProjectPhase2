@@ -90,6 +90,7 @@ public class AdminFacade implements CouponClientFacade {
 	public void removeCompany(Company company) throws Exception {
 
 		// Update the join Table Company_Coupon and remove the company coupons
+		
 		compDAO.removeCompanyCoupons(company);
 		// remove the company
 		compDAO.removeCompany(company);
@@ -132,7 +133,7 @@ public class AdminFacade implements CouponClientFacade {
 	/* Create Customer 
 	 * This method create customer, check if the customer already  exist
 	 */
-	public void createCustomer(Customer customer) throws Exception {
+	public boolean createCustomer(Customer customer) throws Exception {
 		Set<Customer> allCustomers = new HashSet<Customer>();
 		allCustomers = custDAO.getAllCustomers();
 		Iterator<Customer> itrIterator = allCustomers.iterator();
@@ -144,11 +145,12 @@ public class AdminFacade implements CouponClientFacade {
 				JFrame frame = new JFrame("JOptionPane showMessageDialog example");
 				JOptionPane.showMessageDialog(frame, "Customer " + customer.getCustomerName() + " Already Exist");
 				Logger.log(Log.info("Customer " + customer.getCustomerName() + " Already Exist"));
-				return;
+				return false;
 			}
 		}
 		custDAO.createCustomer(customer);
 		Logger.log(Log.info("Customer " + customer.getCustomerName() + " Created"));
+	    return true ; 
 	}
 
 	/* Remove Customer 

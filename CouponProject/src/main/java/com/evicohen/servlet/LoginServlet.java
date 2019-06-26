@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import com.evicohen.Facade.CompanyFacade;
 import com.evicohen.Facade.CouponClientFacade;
+import com.evicohen.Facade.CustomerFacade;
 import com.evicohen.JavaBeans.Company;
 import com.evicohen.Main.CouponSystem;
 import com.evicohen.Main.CouponSystem.clientType;
@@ -94,11 +95,14 @@ public class LoginServlet extends HttpServlet {
 					break;
 
 				case Customer:
-					// updating the session with the logged in customer
-					// Customer customer =
-					// ((CustomerFacade)facade).getLoginCustomer();
-					// session.setAttribute("customer", customer);
+					CustomerFacade customerFacade = new CustomerFacade(); 
+					if (customerFacade.login(username, password, type)) {
+						CustomerFacade customerFacade1 = (CustomerFacade) CouponSystem.getCouponSystem().login(username, password, type);
+						System.out.println("Im here");
+						session.setAttribute("customerFacade", customerFacade1);
 					request.getRequestDispatcher("customer.html").forward(request, response);
+					}
+					
 					break;
 
 				default:

@@ -72,6 +72,11 @@ public class CustomerFacade implements CouponClientFacade {
 		} else
 			return false;
 	}
+	
+	public Customer getCustmer() { 
+		
+		return customerLocaly; 
+	}
 
 	/**
 	 * Purchase Coupon This method purchase coupon Check if the customer already

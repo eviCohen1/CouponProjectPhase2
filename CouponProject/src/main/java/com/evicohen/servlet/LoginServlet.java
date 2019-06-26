@@ -9,13 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.evicohen.Facade.CompanyFacade;
 import com.evicohen.Facade.CouponClientFacade;
+import com.evicohen.JavaBeans.Company;
 import com.evicohen.Main.CouponSystem;
 import com.evicohen.Main.CouponSystem.clientType;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
-	
+
 	private static final long serialVersionUID = 1L;
 	private CouponSystem system;
 
@@ -55,7 +57,7 @@ public class LoginServlet extends HttpServlet {
 
 		session = request.getSession(true); // create a new session for a new
 											// client
-		System.out.println(session.getId() +" * "+ session.getMaxInactiveInterval());
+		System.out.println(session.getId() + " * " + session.getMaxInactiveInterval());
 		// getting the data from the Login HTML form
 		String username = request.getParameter("name");
 		String password = request.getParameter("pass");
@@ -82,10 +84,13 @@ public class LoginServlet extends HttpServlet {
 
 				case Company:
 					// updating the session with the logged in company
-					// Company company =
-					// ((CompanyFacade)facade).getLoginCompany();
-					// session.setAttribute("company", company);
-					request.getRequestDispatcher("company.html").forward(request, response);
+					CompanyFacade companyFacade = new CompanyFacade();
+					if (companyFacade.login(username, password, type)) {
+						CompanyFacade companyFacade1 = (CompanyFacade) CouponSystem.getCouponSystem().login(username, password, type);
+						session.setAttribute("companyFacade", companyFacade1);
+						request.getRequestDispatcher("company.html").forward(request, response);
+					}
+
 					break;
 
 				case Customer:
@@ -115,6 +120,6 @@ public class LoginServlet extends HttpServlet {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-	}	
+	}
 
 }

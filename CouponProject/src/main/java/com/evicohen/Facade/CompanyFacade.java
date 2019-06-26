@@ -69,14 +69,20 @@ public class CompanyFacade implements CouponClientFacade {
 		
 	}
 	
+	public Company getCompany() {
+		return this.company;
+	}
+	
+	
 	/* Create Coupon
 	 * This method create company and insert details to company table, check if the company is already exist 
 	 * @throws DBException
 	 */
-	public void createCoupon(Coupon coupon) throws Exception{ 
+	public Boolean createCoupon(Coupon coupon) throws Exception{ 
 		
 		Set<Coupon> allCoupons = new HashSet<Coupon>() ; 
 		allCoupons = getAllCoupons(); 
+	
 		Iterator<Coupon> itr = allCoupons.iterator(); 
 		 
 		while(itr.hasNext())
@@ -88,11 +94,16 @@ public class CompanyFacade implements CouponClientFacade {
 				JFrame frame = new JFrame("JOptionPane showMessageDialog example");
 				JOptionPane.showMessageDialog(frame, "Coupon " + coupon.getTitle() + " Already Exist");
 				Logger.log(Log.info("Coupon " + coupon.getTitle() + " Already Exist"));
-				return;		
+				return false;		
 			}
 		}
+		System.out.println(company);
+		System.out.println(coupon);
+		
 		couponDBDAO.createCoupon(coupon, company);	
 		Logger.log(Log.info("Created coupon " + coupon.getTitle() + " successfully"));
+		System.out.println("Created Coupon");
+		return true ; 
 	}
 	
 	/**Remove Coupon

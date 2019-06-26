@@ -21,7 +21,7 @@ public class Coupon {
 	private String message;
 	private double price;
 	private String image;
-	private Boolean active;
+	private boolean active;
 	
 	// CTORS
 	
@@ -51,6 +51,8 @@ public class Coupon {
 	
 	
 	// Methods
+	
+
 	
 	public long getId() {
 		return id;

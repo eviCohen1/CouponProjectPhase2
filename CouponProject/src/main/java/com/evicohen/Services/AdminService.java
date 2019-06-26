@@ -75,7 +75,7 @@ public class AdminService {
 	@GET 
 	@Path ("getCompany/{companyId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getComapny (@PathParam("companyId") long comId) throws Exception { 
+	public String getCompany (@PathParam("companyId") long comId) throws Exception { 
 		
 		AdminFacade admin = getFacade() ; 
 		

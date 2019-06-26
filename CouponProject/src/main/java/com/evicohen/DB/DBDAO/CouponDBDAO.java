@@ -621,7 +621,6 @@ public class CouponDBDAO implements CouponDAO {
 		} catch (Exception e) {
 			throw new DBException("The Connection is faild");
 		}
-
 		// Define the Execute query
 		String sql = "INSERT INTO COUPON (TITLE,START_DATE,END_DATE,AMOUNT,TYPE,MESSAGE,PRICE,IMAGE,ACTIVE)  VALUES(?,?,?,?,?,?,?,?,?)";
 		String sql2 = " INSERT INTO COMPANY_COUPON (COMP_ID,COUPON_ID) VALUES(?,?)";

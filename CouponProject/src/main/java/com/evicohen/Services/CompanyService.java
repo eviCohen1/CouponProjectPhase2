@@ -48,7 +48,7 @@ public class CompanyService {
 	public String getCompany(@PathParam("compName") String compName) throws Exception {
 
 		CompanyFacade companyFacade = getFacade();
-		System.out.println("I am here getCompany");
+
 		try {
 
 			Company company = (Company) companyFacade.getCompany(compName);
@@ -158,8 +158,8 @@ public class CompanyService {
 	public String getAllCompanyCoupons() throws Exception {
 
 		CompanyFacade companyFacade = getFacade();
-
-		Collection<Coupon> coupons = companyFacade.getAllCoupons();
+        Company company = companyFacade.getCompany(); 
+		Collection<Coupon> coupons = companyFacade.getCompanyCoupons(company);
 
 		return new Gson().toJson(coupons);
 	}
